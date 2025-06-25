@@ -9,7 +9,7 @@ import unicodedata # Para lidar com acentos e caracteres especiais
 import re          # Para substituir caracteres não alfanuméricos
 
 
-# --- NOVO: Função auxiliar para normalizar nomes de colunas e tabelas ---
+# --- Função auxiliar para normalizar nomes de colunas e tabelas ---
 def normalize_name(name: str) -> str:
     """
     Normaliza um nome (de coluna ou tabela) para ser compatível com SQL:
@@ -61,22 +61,17 @@ def load_csv_to_sqlite_tool(directory_path: str) -> str:
         for filename in os.listdir(directory_path):
             if filename.endswith(".csv"):
                 file_path = os.path.join(directory_path, filename)
-                
-                # Cria um nome de tabela válido para SQLite a partir do nome do arquivo
-                # table_name = os.path.splitext(filename)[0].replace("-", "_").replace(" ", "_").lower()
 
-                # --- ALTERAÇÃO AQUI: Normaliza o nome da tabela ---
-                # A lógica de tratamento de nome de tabela já estava OK, mas agora usamos a função `normalize_name`
+                # Normaliza o nome da tabela
                 table_name = normalize_name(os.path.splitext(filename)[0]) 
-
 
                 try:
                     df = pd.read_csv(file_path)
                     
-                    # --- NOVO: Normaliza os nomes das colunas do DataFrame ---
+                    # Normaliza os nomes das colunas do DataFrame ---
                     df.columns = [normalize_name(col) for col in df.columns]
 
-                    # --- NOVO: Normaliza dados de colunas de texto ---
+                    # Normaliza dados de colunas de texto
                     for col in df.columns:
                         # Verifica se a coluna é de tipo objeto (geralmente string)
                         if df[col].dtype == 'object':
@@ -89,7 +84,7 @@ def load_csv_to_sqlite_tool(directory_path: str) -> str:
                     df.to_sql(table_name, conn, if_exists="replace", index=False)
 
                     # Coleta e armazena metadados
-                    # Usamos to_dict('records') para facilitar a passagem para um DataFrame de metadados
+                    # Usa to_dict('records') para facilitar a passagem para um DataFrame de metadados
                     columns_metadata = []
                     for col in df.columns:  # Agora 'df.columns' já contém os nomes normalizados
                         columns_metadata.append({

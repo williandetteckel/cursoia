@@ -22,7 +22,7 @@ class ResponseFormatterAgent:
         )
 
     def run(self, generated_code: str):
-        app_logger.info(f"ResponseFormatterAgent: Iniciando formatação para o código: \n```\n{generated_code}\n```") # <--- NOVO: Adiciona log
+        app_logger.info(f"ResponseFormatterAgent: Iniciando formatação para o código: \n```\n{generated_code}\n```")
 
         # 1. Defina o Agente
         response_formatter_agent = Agent(
@@ -83,16 +83,10 @@ class ResponseFormatterAgent:
         )
 
         # 4. Inicie o processo da Crew
-        # print("Iniciando processo de execução e formatação da resposta...")
-        # final_response = crew.kickoff(inputs={"generated_code": generated_code})
-        # print("Processo de formatação da resposta concluído.")
-        
-        # return final_response
-        
         try:
             final_response = crew.kickoff(inputs={"generated_code": generated_code})
-            app_logger.info(f"ResponseFormatterAgent: Resposta final da CrewAI: \n```\n{final_response}\n```") # <--- NOVO: Adiciona log
+            app_logger.info(f"ResponseFormatterAgent: Resposta final da CrewAI: \n```\n{final_response}\n```")
             return final_response
         except Exception as e:
-            app_logger.error(f"ResponseFormatterAgent: Erro durante a formatação da resposta pela Crew: {e}", exc_info=True) # <--- NOVO: Adiciona log de erro
+            app_logger.error(f"ResponseFormatterAgent: Erro durante a formatação da resposta pela Crew: {e}", exc_info=True)
             raise # Re-lança o erro

@@ -78,22 +78,14 @@ class DataLoaderAgent:
         )
 
         # 4. Inicie o processo da Crew
-        # print("Iniciando processo de carga de dados...")
-        # result = crew.kickoff(inputs={
-        #     "zip_file_path": zip_file_path,
-        #     "destination_directory": destination_directory
-        # })
-        # print("Processo de carga de dados concluído.")
-        # return result
-
         try:
             result = crew.kickoff(inputs={
                 "zip_file_path": zip_file_path,
                 "destination_directory": destination_directory
             })
-            app_logger.info(f"DataLoaderAgent: Processo CrewAI concluído com sucesso. Resultado: {result}") # <--- NOVO: Adiciona log
+            app_logger.info(f"DataLoaderAgent: Processo CrewAI concluído com sucesso. Resultado: {result}")
             return result
         except Exception as e:
-            app_logger.error(f"DataLoaderAgent: Erro durante a execução da Crew: {e}", exc_info=True) # <--- NOVO: Adiciona log de erro
+            app_logger.error(f"DataLoaderAgent: Erro durante a execução da Crew: {e}", exc_info=True)
             raise # Re-lança o erro para ser capturado no app.py
         

@@ -24,7 +24,7 @@ class QueryAnalyzerAgent:
         self.dataframe_store = DataFrameStore() # Instancia o Singleton para acesso aos metadados
 
     def run(self, question: str):
-        app_logger.info(f"QueryAnalyzerAgent: Iniciando análise para a pergunta: '{question}'") # <--- NOVO: Adiciona log
+        app_logger.info(f"QueryAnalyzerAgent: Iniciando análise para a pergunta: '{question}'")
 
         # 1. Obtenha o contexto do esquema das tabelas do DataFrameStore
         # Isso será passado para o SQLGeneratorTool
@@ -41,7 +41,7 @@ class QueryAnalyzerAgent:
             )
             table_schemas_context = "\n".join(grouped_metadata.tolist())
 
-        app_logger.debug(f"QueryAnalyzerAgent: Contexto de metadados:\n{table_schemas_context}") # <--- NOVO: Log de debug
+        app_logger.debug(f"QueryAnalyzerAgent: Contexto de metadados:\n{table_schemas_context}")
 
 
         # 2. Defina o Agente
@@ -127,17 +127,10 @@ class QueryAnalyzerAgent:
         )
 
         # 5. Inicie o processo da Crew
-        # print("Iniciando processo de análise da pergunta e geração de consulta...")
-        # generated_code = crew.kickoff(inputs={"question": question})
-        # print("Processo de geração de consulta concluído.")
-        
-        # # Retorna o código gerado, que será passado para o próximo agente (ResponseFormatterAgent)
-        # return generated_code
-
         try:
             generated_code = crew.kickoff(inputs={"question": question})
-            app_logger.info(f"QueryAnalyzerAgent: Código gerado pela CrewAI: \n```\n{generated_code}\n```") # <--- NOVO: Adiciona log
+            app_logger.info(f"QueryAnalyzerAgent: Código gerado pela CrewAI: \n```\n{generated_code}\n```")
             return generated_code
         except Exception as e:
-            app_logger.error(f"QueryAnalyzerAgent: Erro durante a geração do código pela Crew: {e}", exc_info=True) # <--- NOVO: Adiciona log de erro
+            app_logger.error(f"QueryAnalyzerAgent: Erro durante a geração do código pela Crew: {e}", exc_info=True)
             raise # Re-lança o erro
