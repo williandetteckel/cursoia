@@ -78,7 +78,6 @@ if uploaded_file is not None:
                     destination_directory=UPLOAD_DIR
                 )
                 
-                # CORREÇÃO: A saída de crew.kickoff pode ser um CrewOutput object.
                 # Acessamos o atributo 'raw' ou o que for o resultado textual final.
                 # CrewOutput geralmente tem um atributo .raw ou .result
                 # Se for uma string, .raw deve funcionar.
@@ -87,7 +86,7 @@ if uploaded_file is not None:
                 st.write("---")
                 st.subheader("Processamento de Carga Concluído!")
                 # st.success(loader_result)
-                st.success(display_loader_result) # <--- CORREÇÃO AQUI
+                st.success(display_loader_result)
                 app_logger.info(f"Processamento de carga concluído: {display_loader_result}")
                 st.session_state.uploaded_zip_processed = True
             except Exception as e:
@@ -126,12 +125,12 @@ if st.session_state.uploaded_zip_processed:
 
     # Adicione uma chave única ao text_area e use o valor diretamente dele.
     # O valor padrão é carregado do session_state, mas qualquer alteração no widget
-    # será refletida no 'question_input' nesta execução.
+    # será refletida no 'question_input' nesta execução. => AINDA NÃO FUNCIONA COMO DESEJADO
     question = st.text_area(
         "Digite sua pergunta aqui (ex: 'Quantas CHAVE DE ACESSO distintas existem?', 'Quais as colunas da tabela de notas_fiscais?')",
         value=st.session_state.last_question,
         height=100,
-        key="user_question_input" # <--- ADICIONE ESTA CHAVE ÚNICA
+        key="user_question_input"
     )
 
     if st.button("Perguntar"):
@@ -170,7 +169,7 @@ if st.session_state.uploaded_zip_processed:
                     # No .code, o método .strip() deve ser aplicado na string
                     # st.code(generated_code.strip(), language='sql' if generated_code.strip().lower().startswith('select') else 'python')
 
-                    # ALTERAÇÃO AQUI: Usar st.text_area para exibir o código gerado
+                    # ALTERAÇÃO AQUI: Usar st.text_area para exibir o código gerado => NÃO ESTÁ FUNCIONANDO PARA METADADOS
                     # Com height fixo e read_only para que não seja editável
                     st.text_area(
                         "Código Gerado:", # Título do text_area
@@ -180,7 +179,7 @@ if st.session_state.uploaded_zip_processed:
                         key="generated_code_display", # Chave única para o widget
                         disabled=True # Torna o campo somente leitura
                     )
-                    app_logger.info(f"Código gerado pelo QueryAnalyzerAgent: \n```\n{generated_code.strip()}\n```") # <--- NOVO: Adiciona log
+                    app_logger.info(f"Código gerado pelo QueryAnalyzerAgent: \n```\n{generated_code.strip()}\n```")
 
                     # 2. Chama o ResponseFormatterAgent para executar o código e formatar a resposta
                     st.info("Agente de Formatação está executando e preparando a resposta...")
@@ -203,7 +202,7 @@ if st.session_state.uploaded_zip_processed:
                     st.write("---")
                     st.subheader("Resposta Final:")
                     st.markdown(final_response)
-                    app_logger.info(f"Resposta final formatada: \n```\n{final_response}\n```") # <--- NOVO: Adiciona log
+                    app_logger.info(f"Resposta final formatada: \n```\n{final_response}\n```")
 
                 except Exception as e:
                     # st.error(f"Ocorreu um erro ao processar sua pergunta: {e}")
@@ -211,7 +210,7 @@ if st.session_state.uploaded_zip_processed:
                     
                     st.error(f"Ocorreu um erro ao processar sua pergunta: {e}")
                     st.info("Verifique os logs em './tmp/agent_activity.log' para mais detalhes.")
-                    app_logger.error(f"Erro ao processar pergunta: {e}", exc_info=True) # <--- NOVO: Adiciona log com traceback
+                    app_logger.error(f"Erro ao processar pergunta: {e}", exc_info=True)
 
         else:
             st.warning("Por favor, digite uma pergunta.")
