@@ -1,0 +1,13 @@
+pandas
+agno
+groq
+openai
+openpyxl
+streamlit
+dotenv
+fastapi
+sqlalchemy
+ddgs
+yfinance
+uvicorn
+holidays
